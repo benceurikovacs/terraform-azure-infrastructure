@@ -1,13 +1,12 @@
-# Project 4 – Azure Infrastructure Automation with Terraform
+# Azure Infrastructure Automation with Terraform
 
-## Project goal
+Azure infrastructure provisioned with Terraform using Infrastructure as Code principles.
 
-This project demonstrates infrastructure as code using Terraform on Microsoft Azure.  
-It automates the creation of a resource group, virtual network, subnet, network security group, storage account, remote Terraform state container, App Service Plan and Linux Web App.
+This project creates a resource group, virtual network, subnet, network security group, storage account, remote Terraform state container, App Service Plan and Linux Web App.
 
-The networking and storage resources are deployed in **North Europe**, while the App Service Plan and Web App are deployed in **Sweden Central** because of regional capacity restrictions.
+The networking and storage resources run in **North Europe**, while the App Service Plan and Web App run in **Sweden Central** because of regional capacity restrictions.
 
-## Technologies used
+## Technologies Used
 
 - Terraform
 - Microsoft Azure
@@ -19,54 +18,67 @@ The networking and storage resources are deployed in **North Europe**, while the
 
 ## Architecture
 
-```mermaid
-flowchart TD
-    subgraph NorthEurope["Azure - North Europe"]
-        RG[Resource Group<br/>rg-devops-terraform-neu]
-        VNet[Virtual Network<br/>vnet-devops-tf-northeurope]
-        Subnet[Subnet<br/>snet-app]
-        NSG[Network Security Group<br/>nsg-devops-tf-app]
-        Storage[Storage Account<br/>stdevopstfr2q9e5]
-        State[Blob Container<br/>tfstate]
+```text
+Terraform Configuration
+   ↓
+Azure Resource Group
+   ↓
+Virtual Network → Subnet → Network Security Group
+   ↓
+Storage Account → Terraform State Container
 
-        RG --> VNet
-        VNet --> Subnet
-        Subnet --- NSG
-        RG --> Storage
-        Storage --> State
-    end
-
-    subgraph SwedenCentral["Azure - Sweden Central"]
-        Plan[App Service Plan<br/>asp-devops-tf-swedencentral]
-        WebApp[Linux Web App<br/>app-devopstf-r2q9e5]
-
-        Plan --> WebApp
-    end
-
-    Terraform[Terraform Configuration] --> NorthEurope
-    Terraform --> SwedenCentral
+Terraform Configuration
+   ↓
+App Service Plan → Linux Web App
 ```
 
-The App Service is deployed as a separate Azure resource. In this project it is not integrated into the virtual network.
+The App Service is deployed as a separate Azure resource. In this project, it is not integrated into the virtual network.
 
-## Terraform commands
+## Terraform Resources
+
+- Azure Resource Group
+- Virtual Network
+- Subnet
+- Network Security Group and subnet association
+- Storage Account
+- Blob container for remote Terraform state
+- App Service Plan
+- Linux Web App
+
+## Run the Project
+
+Initialize Terraform:
 
 ```bash
 terraform init
+```
+
+Format and validate the configuration:
+
+```bash
 terraform fmt
 terraform validate
+```
+
+Review the planned changes:
+
+```bash
 terraform plan
+```
+
+Deploy the infrastructure:
+
+```bash
 terraform apply
+```
+
+Show the created resources:
+
+```bash
 terraform output
 ```
 
-## Deployment result
-
-```text
-Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
-```
-
-## Terraform outputs
+## Terraform Outputs
 
 ```text
 app_service_plan_name = "asp-devops-tf-swedencentral"
@@ -81,11 +93,15 @@ web_app_name = "app-devopstf-r2q9e5"
 web_app_url = "[https://app-devopstf-r2q9e5.azurewebsites.net](https://app-devopstf-r2q9e5.azurewebsites.net)"
 ```
 
-## What I learned
+## What I Learned
 
-- Creating Azure resources with Terraform.
-- Using Terraform state stored remotely in Azure Blob Storage.
-- Configuring virtual networking and network security rules.
-- Deploying an Azure App Service Plan and Linux Web App.
-- Handling Azure regional capacity and quota limitations.
-- Reviewing Terraform plans before applying infrastructure changes.
+- How to create Azure resources with Terraform.
+- How to store Terraform state remotely in Azure Blob Storage.
+- How to configure virtual networking and network security rules.
+- How to deploy an Azure App Service Plan and Linux Web App.
+- How to handle Azure regional capacity and quota limitations.
+- How to review Terraform plans before applying infrastructure changes.
+
+## Author
+
+Bence Uri-Kovács
